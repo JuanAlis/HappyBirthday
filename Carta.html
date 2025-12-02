@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #fff8e1 0%, #ffe082 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Decorative sunflowers in corners */
+        .corner-sunflower {
+            position: fixed;
+            width: 120px;
+            height: 120px;
+            opacity: 0.3;
+            z-index: 1;
+            animation: gentleSway 4s ease-in-out infinite;
+        }
+
+        .corner-sunflower.top-left {
+            top: 20px;
+            left: 20px;
+            transform: rotate(-15deg);
+        }
+
+        .corner-sunflower.top-right {
+            top: 20px;
+            right: 20px;
+            transform: rotate(15deg);
+            animation-delay: 1s;
+        }
+
+        .corner-sunflower.bottom-left {
+            bottom: 20px;
+            left: 20px;
+            transform: rotate(15deg);
+            animation-delay: 2s;
+        }
+
+        .corner-sunflower.bottom-right {
+            bottom: 20px;
+            right: 20px;
+            transform: rotate(-15deg);
+            animation-delay: 3s;
+        }
+
+        @keyframes gentleSway {
+            0%, 100% { transform: rotate(0deg) translateY(0); }
+            50% { transform: rotate(5deg) translateY(-10px); }
+        }
+
+        /* Main container */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Initial instruction text */
+        .instruction {
+            font-size: 1.5rem;
+            color: #f57c00;
+            margin-bottom: 30px;
+            text-align: center;
+            animation: fadeInPulse 2s ease-in-out infinite;
+            font-style: italic;
+        }
+
+        @keyframes fadeInPulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        /* Main sunflower */
+        .sunflower-container {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .sunflower-container:hover {
+            transform: scale(1.1) rotate(5deg);
+            filter: drop-shadow(0 0 30px rgba(255, 193, 7, 0.8));
+        }
+
+        .sunflower-container.opening {
+            animation: sunflowerOpen 1.5s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes sunflowerOpen {
+            0% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.3) rotate(180deg);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(0) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .sunflower {
+            width: 250px;
+            height: 250px;
+            position: relative;
+        }
+
+        /* Sunflower center */
+        .sunflower-center {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #8b4513 0%, #654321 100%);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Sunflower petals */
+        .petal {
+            position: absolute;
+            width: 60px;
+            height: 100px;
+            background: linear-gradient(to bottom, #ffd54f 0%, #ffb300 100%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            top: 50%;
+            left: 50%;
+            transform-origin: 50% 100%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .petal:nth-child(1) { transform: translate(-50%, -100%) rotate(0deg); }
+        .petal:nth-child(2) { transform: translate(-50%, -100%) rotate(45deg); }
+        .petal:nth-child(3) { transform: translate(-50%, -100%) rotate(90deg); }
+        .petal:nth-child(4) { transform: translate(-50%, -100%) rotate(135deg); }
+        .petal:nth-child(5) { transform: translate(-50%, -100%) rotate(180deg); }
+        .petal:nth-child(6) { transform: translate(-50%, -100%) rotate(225deg); }
+        .petal:nth-child(7) { transform: translate(-50%, -100%) rotate(270deg); }
+        .petal:nth-child(8) { transform: translate(-50%, -100%) rotate(315deg); }
+
+        /* Birthday letter card */
+        .letter-card {
+            display: none;
+            max-width: 600px;
+            width: 90%;
+            background: #fffef7;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: letterAppear 1s ease-out forwards;
+            border: 3px solid #ffb300;
+        }
+
+        .letter-card.show {
+            display: block;
+        }
+
+        @keyframes letterAppear {
+            0% {
+                opacity: 0;
+                transform: scale(0.5) translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* Sunflower border decoration */
+        .letter-card::before,
+        .letter-card::after {
+            content: '🌻';
+            position: absolute;
+            font-size: 2rem;
+            animation: rotateSunflower 10s linear infinite;
+        }
+
+        .letter-card::before {
+            top: -15px;
+            left: -15px;
+        }
+
+        .letter-card::after {
+            bottom: -15px;
+            right: -15px;
+            animation-direction: reverse;
+        }
+
+        @keyframes rotateSunflower {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .letter-header {
+            text-align: center;
+            color: #f57c00;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-family: 'Brush Script MT', cursive;
+        }
+
+        .letter-content {
+            /* Edit the letter text here -->
+            Replace the text inside this div with your personalized birthday message */
+            font-family: 'Brush Script MT', 'Dancing Script', cursive;
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: #5d4037;
+            text-align: justify;
+        }
+
+        .letter-content p {
+            margin-bottom: 15px;
+        }
+
+        .letter-signature {
+            text-align: right;
+            margin-top: 30px;
+            font-style: italic;
+            color: #f57c00;
+        }
+
+        /* Small decorative sunflowers around letter */
+        .small-sunflower {
+            display: inline-block;
+            font-size: 1.5rem;
+            animation: bobbing 3s ease-in-out infinite;
+        }
+
+        @keyframes bobbing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Floating petals animation */
+        .petal-particle {
+            position: fixed;
+            font-size: 1.5rem;
+            pointer-events: none;
+            z-index: 100;
+            animation: floatPetal 8s linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatPetal {
+            0% {
+                opacity: 0;
+                transform: translateY(0) rotate(0deg);
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100vh) rotate(360deg);
+            }
+        }
+
+        /* Photo gallery */
+        .photo-gallery {
+            display: none;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .photo-gallery.show {
+            display: block;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .gallery-title {
+            color: #f57c00;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-family: 'Brush Script MT', cursive;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(135deg, #ffe082 0%, #ffb300 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            border: 3px solid #f57c00;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .photo-placeholder:hover {
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .photo-placeholder::after {
+            content: 'Add Photo';
+            position: absolute;
+            bottom: 5px;
+            font-size: 0.8rem;
+            color: #5d4037;
+            font-family: 'Georgia', serif;
+        }
+
+        /* Music control button */
+        .music-control {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #ffd54f 0%, #ffb300 100%);
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .music-control.show {
+            display: block;
+            animation: bounceIn 0.5s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .music-control:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .music-control:active {
+            transform: scale(0.95);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .sunflower {
+                width: 200px;
+                height: 200px;
+            }
+
+            .sunflower-center {
+                width: 60px;
+                height: 60px;
+            }
+
+            .petal {
+                width: 45px;
+                height: 75px;
+            }
+
+            .instruction {
+                font-size: 1.2rem;
+            }
+
+            .letter-card {
+                padding: 25px;
+            }
+
+            .letter-header {
+                font-size: 1.5rem;
+            }
+
+            .letter-content {
+                font-size: 1.1rem;
+            }
+
+            .corner-sunflower {
+                width: 80px;
+                height: 80px;
+            }
+
+            .music-control {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Corner decorative sunflowers -->
+    <div class="corner-sunflower top-left">🌻</div>
+    <div class="corner-sunflower top-right">🌻</div>
+    <div class="corner-sunflower bottom-left">🌻</div>
+    <div class="corner-sunflower bottom-right">🌻</div>
+
+    <div class="container">
+        <!-- Initial instruction -->
+        <div class="instruction" id="instruction">
+            Tap the sunflower to read your birthday letter 🌻
+        </div>
+
+        <!-- Main interactive sunflower -->
+        <div class="sunflower-container" id="sunflowerContainer">
+            <div class="sunflower">
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="petal"></div>
+                <div class="sunflower-center"></div>
+            </div>
+        </div>
+
+        <!-- Birthday letter (hidden initially) -->
+        <div class="letter-card" id="letterCard">
+            <div class="letter-header">
+                Happy Birthday! 🌻
+            </div>
+            
+            <!-- Edit the letter text here -->
+            <!-- Replace the content below with your personalized birthday message -->
+            <div class="letter-content" id="letter">
+                <p>Dear Amorcito,</p>
+                
+                <p>Hoy es tu día, y no puedo evitar sentir una alegría profunda por ti.<br>
+                Feliz cumpleaños, amor. Gracias por existir, por iluminar incluso los momentos más simples y por tener un corazón tan hermoso.</p>
+                
+                <p>Quiero que sepas que estoy orgulloso de ti.<br>
+                De lo que eres, de lo que has logrado, de cómo sigues creciendo incluso cuando la vida pone obstáculos. Eres fuerte, inteligente, sensible, y tienes una luz única que merece ser celebrada cada día.</p>
+                
+                <p>En este nuevo año que comienza para ti, deseo con toda mi alma que encuentres caminos llenos de paz, oportunidades que te hagan brillar y momentos que te recuerden lo valiosa que eres.<br>
+                Ojalá la vida te sorprenda bonito, que te cuide y te regale lo que mereces: lo mejor.</p>
+                
+                <p>Que tus sueños se acerquen, que tus heridas sanen, que tus risas se multipliquen y que cada paso te lleve hacia algo que te haga feliz.</p>
+
+                <p>Yo seguiré aquí, a tu lado, admirándote, apoyándote y queriéndote con toda la ternura que me nace cuando pienso en ti.</p>
+
+                <p>Feliz cumpleaños, mi amor.<br>
+                Que este sea un año lleno de luz, de calma y de alegría para ti.<br>
+                Te lo mereces todo.</p>   
+
+                <p class="small-sunflower">🌻 🌻 🌻</p>
+                
+                <div class="letter-signature">
+                    Con todo mi cariño,<br>
+                    Juan Alís
+                </div>
+            </div>
+
+            <!-- Photo Gallery Section -->
+            <!-- You can replace the emoji placeholders with actual photos by using <img> tags -->
+            <div class="photo-gallery" id="photoGallery">
+                <div class="gallery-title">
+                    <span class="small-sunflower">🌻</span> Our Memories <span class="small-sunflower">🌻</span>
+                </div>
+                <!-- Ejemplo usando tus propias fotos -->
+                <div class="photo-grid">
+                    
+                    <img src="assets/images/IMG_1042.jpeg" style="width:100%; height:150px; object-fit:cover; border-radius:10px;">
+                    <img src="assets/images/IMG_01422.jpg" style="width:100%; height:150px; object-fit:cover; border-radius:10px;">
+                    <img src="assets/images/IMG_0141.jpg" style="width:100%; height:150px; object-fit:cover; border-radius:10px;">
+                    <img src="assets/images/IMG_0143.jpg" style="width:100%; height:150px; object-fit:cover; border-radius:10px;">
+                    <p>hola</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Music Control Button -->
+    <button class="music-control" id="musicControl" title="Toggle Music">
+        🎵
+    </button>
+
+    <!-- Background Music -->
+    <!-- Replace the src with your own music file URL -->
+    <audio id="bgMusic" loop>
+        <source src="ASSETS/audio/VIDEOCLUB Roi (Clip officiel).mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Get elements
+        const sunflowerContainer = document.getElementById('sunflowerContainer');
+        const letterCard = document.getElementById('letterCard');
+        const instruction = document.getElementById('instruction');
+        const musicControl = document.getElementById('musicControl');
+        const bgMusic = document.getElementById('bgMusic');
+        const photoGallery = document.getElementById('photoGallery');
+
+        let musicPlaying = false;
+
+        // Add click event to sunflower
+        sunflowerContainer.addEventListener('click', function() {
+            // Add opening animation class
+            sunflowerContainer.classList.add('opening');
+            
+            // Hide instruction text
+            instruction.style.animation = 'none';
+            instruction.style.opacity = '0';
+            instruction.style.transition = 'opacity 0.5s ease';
+            
+            // Show letter after animation completes
+            setTimeout(function() {
+                sunflowerContainer.style.display = 'none';
+                letterCard.classList.add('show');
+                
+                // Show photo gallery after letter appears
+                setTimeout(function() {
+                    photoGallery.classList.add('show');
+                }, 800);
+                
+                // Show music control
+                musicControl.classList.add('show');
+                
+                // Start floating petals
+                createFloatingPetals();
+                
+                // Auto-play music (some browsers may block this)
+                bgMusic.play().then(() => {
+                    musicPlaying = true;
+                    musicControl.textContent = '🔊';
+                }).catch(() => {
+                    // If autoplay is blocked, user can click the button
+                    musicPlaying = false;
+                    musicControl.textContent = '🔇';
+                });
+            }, 1500);
+        });
+
+        // Music control toggle
+        musicControl.addEventListener('click', function() {
+            if (musicPlaying) {
+                bgMusic.pause();
+                musicControl.textContent = '🔇';
+                musicPlaying = false;
+            } else {
+                bgMusic.play();
+                musicControl.textContent = '🔊';
+                musicPlaying = true;
+            }
+        });
+
+        // Create floating petals effect
+        function createFloatingPetals() {
+            const petals = ['🌻', '🌼', '🌸', '💛'];
+            
+            setInterval(function() {
+                const petal = document.createElement('div');
+                petal.className = 'petal-particle';
+                petal.textContent = petals[Math.floor(Math.random() * petals.length)];
+                petal.style.left = Math.random() * 100 + '%';
+                petal.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                petal.style.animationDelay = Math.random() * 2 + 's';
+                
+                document.body.appendChild(petal);
+                
+                // Remove petal after animation
+                setTimeout(function() {
+                    petal.remove();
+                }, 10000);
+            }, 800);
+        }
+    </script>
+</body>
+</html>
