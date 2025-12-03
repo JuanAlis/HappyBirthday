@@ -260,6 +260,7 @@
         /* Floating petals animation */
         .petal-particle {
             position: fixed;
+             top: 100vh;   
             font-size: 1.5rem;
             pointer-events: none;
             z-index: 100;
@@ -565,7 +566,7 @@
 
         // Add click event to sunflower
         sunflowerContainer.addEventListener('click', function() {
-            // Add opening animation class
+            // Add opening animation class 
             sunflowerContainer.classList.add('opening');
             
             // Hide instruction text
@@ -587,6 +588,7 @@
                 musicControl.classList.add('show');
                 
                 // Start floating petals
+            
                 createFloatingPetals();
                 
                 // Auto-play music (some browsers may block this)
@@ -616,7 +618,7 @@
 
         // Create floating petals effect
         function createFloatingPetals() {
-            const petals = ['🌻', '🌼', '🌸', '💛'];
+            const petals = ['🌻', '🌼', '🌸', '💛','🤍'];
             
             setInterval(function() {
                 const petal = document.createElement('div');
@@ -626,6 +628,9 @@
                 petal.style.animationDuration = (Math.random() * 5 + 5) + 's';
                 petal.style.animationDelay = Math.random() * 2 + 's';
                 
+                
+
+
                 document.body.appendChild(petal);
                 
                 // Remove petal after animation
